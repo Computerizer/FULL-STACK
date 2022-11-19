@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('Blog.urls')),
     path('auth/', include('Oauth.urls')),
+    path('TPA/', include('TPA.urls')),
     path('', include('frontend.urls'))
 
 ]
