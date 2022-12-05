@@ -13,8 +13,9 @@ const loadMoreBtn = document.querySelector(".load-more")
 // Feching data & main function
 let mainFunc = async () => {
     let response = await fetch(`http://127.0.0.1:8000/blog/recent-posts/${fetchPostNum}`)
+    console.log(response)
     posts = await response.json()
-
+    console.log(posts)
     slider()
     addRecentPossts()
     let response2 = await fetch('http://127.0.0.1:8000/blog/sales/5')
