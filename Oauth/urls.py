@@ -10,5 +10,6 @@ urlpatterns = [
     path('members/delete-user',DeleteUserInfo.as_view(),name='delete_user'),
     path('members/login',Login.as_view(),name='login'),
     path('members/logout',Logout.as_view(),name='logout'),
-    path('api-token-auth', views.obtain_auth_token,name='auth_token')
+    path('activate/<uidb64>/<token>', activate, name='activate'),
+    path('api-token-auth', views.obtain_auth_token,name='auth_token'),
 ]
