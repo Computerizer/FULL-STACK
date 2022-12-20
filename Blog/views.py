@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from Oauth.models import CustomUser
 from .models import Author, Post, Comment, LikeComment, LikePost, Sale, Category
-from .serializer import AuthorSerializer, LikePostSerializer, RecentPostSerializer, CommentSerializer, LikeCommentSerializer, SaleSerializer, CategorySerializer
+from .serializer import AuthorSerializer, PostSerializer, LikePostSerializer, RecentPostSerializer, CommentSerializer, LikeCommentSerializer, SaleSerializer, CategorySerializer
 from django.core.files.storage import default_storage
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,IsAuthenticatedOrReadOnly,AllowAny
 from rest_framework.authentication import TokenAuthentication
@@ -76,6 +76,7 @@ def getPostsOrdered(request, order, num_of_posts):
 @api_view(["GET"])
 def getPost(request, title):
     post = Post.objects.get(title = title)
+    serializer = PostSerializer(post)
     f = default_storage.open(str(post.body))
     body = f.read().decode("utf-8")
     data = {
@@ -83,7 +84,7 @@ def getPost(request, title):
             'author' : post.author.name,
             'body' : body,
             'description' : post.description,
-            'image':str(post.image),
+            'image': serializer.data['image'],
             'publish_date': post.publish_date,
             'likes' : post.likes,
             'dislikes' : post.dislikes,
@@ -369,11 +370,11 @@ def searchBlog(request, query):
     posts = Post.objects.filter(Q(title__icontains = query) | Q(description__icontains = query))
     categories = Category.objects.filter(Q(title__icontains = query))
 
-    postSerializer = RecentPostSerializer(posts, many = True)
+    serializer = RecentPostSerializer(posts, many = True)
     categoriesSerializer = CategorySerializer(categories, many = True)
     
     data = {}
-    data['posts'] = postSerializer.data
+    data['posts'] = serializer.data
     data['categories'] = categoriesSerializer.data
     
     return Response(data)

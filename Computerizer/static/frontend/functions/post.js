@@ -74,7 +74,7 @@ function renderPost(post) {
     author.innerText = post.author
     dateSpan.innerText = date
     postText.innerHTML = post.body
-    heroImage.src = "/" + post.image
+    heroImage.src = post.image
 }
 
 // Rendering more posts section
